@@ -1,0 +1,7 @@
+; $Id:
+name = Ubercart Editablefields.
+description = Adds possibility to set editable fields for Ubercart product fields.
+dependencies[] = editablefields
+dependencies[] = ctools
+package = Editable Fields
+core = 7.x

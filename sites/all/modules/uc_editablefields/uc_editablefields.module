@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * Implementation of hook_views_api().
+ */
+function uc_editablefields_views_api() {
+  return array(
+    'api' => '3.0',
+  );
+}
+
+/**
+ * Implementation of hook_ctools_plugin_directory().
+ */
+function uc_editablefields_ctools_plugin_directory($module, $plugin) {
+  if ($module == 'editablefields') {
+    return "editablefields";
+  }
+}
