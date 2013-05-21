@@ -35,6 +35,7 @@ class uc_product_handler_field_price extends views_handler_field_numeric {
       '#options' => array(
         'uc_price' => t('Ubercart price'),
         'numeric' => t('Numeric'),
+        'clicktoedit' => t('Click to Edit'),
       ),
       '#default_value' => $options['format'],
       '#weight' => 1,
@@ -59,10 +60,42 @@ class uc_product_handler_field_price extends views_handler_field_numeric {
    * Overrides views_handler_field::render().
    */
   function render($values) {
+//  var_dump(editablefields_load_js());
+    //var_dump(parent::render($values));
+//   dpm(node_load($values->nid),$values->nid);
+
     if ($this->options['format'] == 'numeric') {
       return parent::render($values);
     }
+ if ($this->options['format'] == 'clicktoedit') {
+	/* editablefields_load_js();
 
+    $class = "editablefields clicktoedit";
+    $pre = '<div class="' . $class . '" nid="' . $values->nid . '" field="' . $this->field . '" delta="' . '0' . '">';
+    $pre .= theme('editablefields_clicktoedit_message');
+    $post = '</div>';
+
+    $product = node_load($values->nid);
+    $context = array(
+      'revision' => 'themed',
+      'type' => 'product',
+      'class' => array(
+        'product',
+        $this->field,
+      ),
+      'field' => $this->real_field,
+      'subject' => array(
+        'node' => $product,
+      ),
+    );
+    $options = array('label' => FALSE);
+   return $pre . theme_uc_product_price($product->{$this->real_field}, $context, $options) . $post;*/
+return '<div class="editablefield-item">'.uc_currency_format($this->get_value($values)).'</div>';
+
+
+
+
+    }
     if ($this->options['format'] == 'uc_price') {
       $value = $this->get_value($values);
 
@@ -72,5 +105,6 @@ class uc_product_handler_field_price extends views_handler_field_numeric {
 
       return uc_currency_format($value);
     }
+
   }
 }
