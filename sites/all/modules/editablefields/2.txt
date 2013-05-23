@@ -1,0 +1,10 @@
+<div class="editablefield-item editablefield-processed" id="editablefields-body--7">
+	<div class="field field-name-body field-type-text-with-summary field-label-hidden">
+		<div class="field-items">
+			<div class="field-item even">
+				<p>test</p>
+			</div>
+		</div>
+	</div>
+	<input type="submit" value="Edit this field" name="edit-body-0" id="edit-body-0-actions-edit" class="editablefield-edit editablefield-edit-button form-submit ajax-processed views-ajax-processed-processed">
+</div>

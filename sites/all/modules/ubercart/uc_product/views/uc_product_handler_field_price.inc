@@ -63,6 +63,7 @@ class uc_product_handler_field_price extends views_handler_field_numeric {
 //  var_dump(editablefields_load_js());
     //var_dump(parent::render($values));
 //   dpm(node_load($values->nid),$values->nid);
+dpm($values);
 
     if ($this->options['format'] == 'numeric') {
       return parent::render($values);
@@ -90,7 +91,67 @@ class uc_product_handler_field_price extends views_handler_field_numeric {
     );
     $options = array('label' => FALSE);
    return $pre . theme_uc_product_price($product->{$this->real_field}, $context, $options) . $post;*/
-return '<div class="editablefield-item">'.uc_currency_format($this->get_value($values)).'</div>';
+
+ $items = uc_currency_format($this->get_value($values));
+//    $shield = new EditableFieldsShield();
+//    $shield->arguments = array($values->_field_data['nid']['entity_type'], $values->_field_data['nid']['entity'], uc_currency_format($this->get_value($values)),$instance, 'und', $items, $display);
+$ajax = array(
+    'callback' => 'editablefields_form_update',
+    'wrapper' => $values->nid,
+    'effect' => 'fade',
+    'event' => 'click',
+    'progress' => array(
+      'type' => 'throbber',
+      'message' => t('Please wait'),
+    ),
+  );
+  //$form_id = $values->_field_data['nid']['entity_type'] . '_node_form';
+//  module_load_include('inc', 'node', 'node.pages');
+//  $form = call_user_func_array('drupal_retrieve_form', array($form_id, $form_state, $values->_field_data['nid']['entity']));
+/*$element['#arguments']=$shield;
+  $element['field'] = call_user_func_array('editablefields_fallback_formatter', $element['#arguments']->arguments);
+  if (empty($element['field']) && !empty($element['#arguments']->arguments[6]['settings']['empty_text'])) {
+    $element['field'] = array(
+      '#markup' => $element['#arguments']->arguments[6]['settings']['empty_text'],
+    );
+  }*/
+//$cloned_entity = clone $values->_field_data['nid']['entity'];
+
+  //$form['field']= field_view_field($values->_field_data['nid']['entity_type'], $cloned_entity, 'sell_price');
+// $form['field']= drupal_build_form('product',form_state_defaults());
+ $form['field'] = array(
+  '#type' => 'item',
+  '#markup' => uc_currency_format($this->get_value($values)),
+  '#attributes' => array('class' => array('editablefield-item')),
+);
+//dpm($values->_field_data['nid']['entity_type']);
+//dpm($cloned_entity);
+    //$form['field'] =$element;
+    /*= array(
+      '#pre_render' => array('editablefields_lazy_render_fields'),
+      '#arguments' => $shield,
+    );*/
+    // Click to edit mode: generate a AJAX-bound submit handler.
+    $form['actions']['edit'] = array(
+      '#name' => 'edit-' . $values->nid,
+      '#type' => 'submit',
+      '#value' => t('Edit this field'),
+      '#submit' => array('editablefields_form_submit_edit_mode'),
+      '#ajax' => $ajax,
+//      '#limit_validation_errors' => array($form['#parents']),
+      '#attributes' => array(
+        'class' => array(
+          'editablefield-edit',
+//          'editablefield-edit-' . $edit_style,
+        ),
+      ),
+    );
+
+
+//dpm(drupal_render($form));
+//render($form)
+dpm($form);
+return '<div class="editablefield-item">'.render($form).'</div>';
 
 
 
