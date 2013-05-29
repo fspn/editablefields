@@ -407,6 +407,7 @@ class EditableFieldsShield {
  * #pre-render function: render the fallback formatter of a field, but only if it is actually displayed.
  */
 function editablefields_lazy_render_fields($element) {
+    //dpm($element);
   $element['field'] = call_user_func_array('editablefields_fallback_formatter', $element['#arguments']->arguments);
   if (empty($element['field']) && !empty($element['#arguments']->arguments[6]['settings']['empty_text'])) {
     $element['field'] = array(
@@ -422,7 +423,7 @@ function editablefields_lazy_render_fields($element) {
 function editablefields_views_form($view, $views_field, &$form, &$form_state) {
   // Search for the field object in the $view->field array, so as to extract
   // its actual ID. Views doesn't provide any reliable way to do that otherwise.
-dpm($views_field);
+//dpm($views_field);
   $field_id = array_search($views_field, $view->field, TRUE);
 
   if (!isset($form_state['editablefields'][$field_id])) {

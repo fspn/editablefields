@@ -63,7 +63,7 @@ class uc_product_handler_field_price extends views_handler_field_numeric {
 //  var_dump(editablefields_load_js());
     //var_dump(parent::render($values));
 //   dpm(node_load($values->nid),$values->nid);
-dpm($values);
+//dpm($values);
 
     if ($this->options['format'] == 'numeric') {
       return parent::render($values);
@@ -96,8 +96,8 @@ dpm($values);
 //    $shield = new EditableFieldsShield();
 //    $shield->arguments = array($values->_field_data['nid']['entity_type'], $values->_field_data['nid']['entity'], uc_currency_format($this->get_value($values)),$instance, 'und', $items, $display);
 $ajax = array(
-    'callback' => 'editablefields_form_update',
-    'wrapper' => $values->nid,
+    'callback' => 'edit_fields_form_update_sell_price',
+    'wrapper' => 'edit_field-item-'.$values->nid,
     'effect' => 'fade',
     'event' => 'click',
     'progress' => array(
@@ -118,11 +118,61 @@ $ajax = array(
 //$cloned_entity = clone $values->_field_data['nid']['entity'];
 
   //$form['field']= field_view_field($values->_field_data['nid']['entity_type'], $cloned_entity, 'sell_price');
-// $form['field']= drupal_build_form('product',form_state_defaults());
- $form['field'] = array(
-  '#type' => 'item',
-  '#markup' => uc_currency_format($this->get_value($values)),
-  '#attributes' => array('class' => array('editablefield-item')),
+ //$form['field']= drupal_build_form('product',form_state_defaults());
+  //$form_state = form_state_defaults();
+  //dpm($form_state);
+  //$form1=array();
+  //$form = drupal_retrieve_form('edit_form', $form_state);
+ //$form=drupal_get_form('edit_form');
+ //$form= drupal_prepare_form('edit_form',$form1,$form_state);
+ //dpm($form);
+ $form_id='edit_form';
+ $form['sell_price_form'] = array(
+ '#type'=>'form',
+    );
+    $form['sell_price_form']['#build_id'] = 'form-' . drupal_hash_base64(uniqid(mt_rand(), TRUE) . mt_rand());
+     $form['sell_price_form']['form_build_id'] = array(
+    '#type' => 'hidden',
+    '#value' => $form['sell_price_form']['#build_id'],
+    '#id' => $form['sell_price_form']['#build_id'],
+    '#name' => 'form_build_id',
+    
+    // Form processing and validation requires this value, so ensure the
+    // submitted form value appears literally, regardless of custom #tree
+    // and #parents being set elsewhere.
+    '#parents' => array('form_build_id'),
+  );
+   $form['sell_price_form']['form_id'] = array(
+      '#type' => 'hidden',
+      '#value' => 'edit_form',
+      '#id' => drupal_html_id("edit-edit_form"),
+      
+      // Form processing and validation requires this value, so ensure the
+      // submitted form value appears literally, regardless of custom #tree
+      // and #parents being set elsewhere.
+      '#parents' => array('form_id'),
+    );
+     $form['sell_price_form']['#id'] = drupal_html_id($form_id);
+   $form['sell_price_form']['#token'] = $form_id;
+      $form['sell_price_form']['form_token'] = array(
+        '#id' => drupal_html_id('edit-' . $form_id . '-form-token'),
+        '#type' => 'token',
+        '#default_value' => drupal_get_token($form['#token']),
+        
+        // Form processing and validation requires this value, so ensure the
+        // submitted form value appears literally, regardless of custom #tree
+        // and #parents being set elsewhere.
+        '#parents' => array('form_token'),
+      );
+ $form['sell_price_form']['field'] = array(
+  '#type' => 'textfield',
+      '#value' => t(uc_currency_format($this->get_value($values),FALSE,true)),
+  '#size' => 5,
+  '#maxlength' => 8,
+
+//  '#markup' => uc_currency_format($this->get_value($values)),
+  '#attributes' => array('class' => array('edit_field-sell_price')),
+  //'#ajax' => $ajax,
 );
 //dpm($values->_field_data['nid']['entity_type']);
 //dpm($cloned_entity);
@@ -132,16 +182,17 @@ $ajax = array(
       '#arguments' => $shield,
     );*/
     // Click to edit mode: generate a AJAX-bound submit handler.
-    $form['actions']['edit'] = array(
+    $form['sell_price_form']['actions']['save'] = array(
       '#name' => 'edit-' . $values->nid,
       '#type' => 'submit',
-      '#value' => t('Edit this field'),
-      '#submit' => array('editablefields_form_submit_edit_mode'),
+      '#value' => t('Save'),
+      '#submit' => array('edit_fields_form_submit_sell_price'),
+      '#id' => drupal_html_id($form_id).'-'.$values->nid,
       '#ajax' => $ajax,
 //      '#limit_validation_errors' => array($form['#parents']),
       '#attributes' => array(
         'class' => array(
-          'editablefield-edit',
+          'edit_field-sell_price_save',
 //          'editablefield-edit-' . $edit_style,
         ),
       ),
@@ -150,8 +201,8 @@ $ajax = array(
 
 //dpm(drupal_render($form));
 //render($form)
-dpm($form);
-return '<div class="editablefield-item">'.render($form).'</div>';
+dpm(($form));
+return '<div id="edit_field-item-'.$values->nid.'">'.drupal_render($form).'</div>';
 
 
 
@@ -168,4 +219,17 @@ return '<div class="editablefield-item">'.render($form).'</div>';
     }
 
   }
+  function edit_fields_form_submit_sell_price($form, $form_state) 
+  {
+    dpm($form);
+    dpm($form_state);
+    return ;
+  }
+    function edit_fields_form_update_sell_price($form, $form_state) 
+  {
+    dpm($form);
+    dpm($form_state);
+    return ;
+  }
+  
 }

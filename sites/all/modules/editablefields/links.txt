@@ -1,0 +1,4 @@
+http://drupalace.ru/lesson/perezagruzka-form-na-ajax-v-drupal-7
+http://drupal.org/node/752056
+http://api.drupal.org/api/drupal/includes!ajax.inc/group/ajax/7
+http://drupal.org/node/1043838
