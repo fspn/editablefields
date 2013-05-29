@@ -126,7 +126,7 @@ $ajax = array(
  //$form=drupal_get_form('edit_form');
  //$form= drupal_prepare_form('edit_form',$form1,$form_state);
  //dpm($form);
- $form_id='edit_form';
+/* $form_id='edit_form';
  $form['sell_price_form'] = array(
  '#type'=>'form',
     );
@@ -173,7 +173,8 @@ $ajax = array(
 //  '#markup' => uc_currency_format($this->get_value($values)),
   '#attributes' => array('class' => array('edit_field-sell_price')),
   //'#ajax' => $ajax,
-);
+);*/
+$form=drupal_get_form('form_edit_sell_price',$values->nid);
 //dpm($values->_field_data['nid']['entity_type']);
 //dpm($cloned_entity);
     //$form['field'] =$element;
@@ -182,7 +183,7 @@ $ajax = array(
       '#arguments' => $shield,
     );*/
     // Click to edit mode: generate a AJAX-bound submit handler.
-    $form['sell_price_form']['actions']['save'] = array(
+/*    $form['sell_price_form']['actions']['save'] = array(
       '#name' => 'edit-' . $values->nid,
       '#type' => 'submit',
       '#value' => t('Save'),
@@ -196,12 +197,12 @@ $ajax = array(
 //          'editablefield-edit-' . $edit_style,
         ),
       ),
-    );
+    );*/
 
 
 //dpm(drupal_render($form));
 //render($form)
-dpm(($form));
+//dpm(($form));
 return '<div id="edit_field-item-'.$values->nid.'">'.drupal_render($form).'</div>';
 
 

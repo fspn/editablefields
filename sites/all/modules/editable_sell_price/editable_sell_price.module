@@ -1,0 +1,110 @@
+<?php
+ 
+/**
+ * Implements hook_menu().
+ */
+function form_ajax_menu() {
+  $items = array();
+  $items['ajax_page'] = array(
+    'title' => t('Ajax form example'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('form_edit_sell_price'),
+    'access callback' => TRUE,
+  );
+  return $items;
+}
+function form_edit_sell_price($form, &$form_state) {
+//	dpm($form);
+//dpm($form_state);
+$nid=$form_state['build_info']['args']['0'];
+$form_id='form_edit_sell_price';
+$n=node_load($form_state['build_info']['args']['0']);
+//dpm($n);
+$form = array();
+ $ajax = array(
+    'callback' => 'form_edit_sell_price_callback',
+    'wrapper' => 'replace_textfield_div-'.$nid,
+    'effect' => 'fade',
+    'event' => 'blur',
+ //   'progress' => array(
+//      'type' => 'throbber',
+//      'message' => t('Please wait'),
+//    ),
+  );
+  $form['sell_price_form'] = array(
+    '#type' => 'container',
+    // The prefix/suffix provide the div that we're replacing, named by
+    // #ajax['wrapper'] above.
+    '#prefix' => '<div id="replace_textfield_div-'.$nid.'">',
+    '#suffix' => '</div>',
+  );
+$form['sell_price_form']['field'] = array(
+  '#type' => 'textfield',
+  '#value' => t(uc_currency_format($n->sell_price,FALSE,true)),
+//  '#process' => array('form_edit_sell_price_process'), 
+  '#size' => 5,
+  '#maxlength' => 8,
+ '#ajax' => $ajax,
+  '#attributes' => array('class' => array('edit_field-sell_price')),
+);
+
+/*$form['sell_price_form']['actions']['save'] = array(
+      '#name' => 'edit-' . $nid,
+      '#type' => 'submit',
+      '#value' => t('Save'),
+      '#submit' => array('form_edit_sell_price_submit'),
+      '#id' => drupal_html_id($form_id).'-'.$nid,
+     // '#ajax' => $ajax,
+      '#attributes' => array(
+        'class' => array(
+          'edit_field-sell_price_save',
+        ),
+      ),
+    );*/
+  /*$form['changethis'] = array(
+    '#title' => t("Choose something and explain why"),
+    '#type' => 'select',
+    '#options' => array(
+      'one' => 'one',
+      'two' => 'two',
+      'three' => 'three',
+    ),
+    '#ajax' => array(
+      // #ajax has two required keys: callback and wrapper.
+      // 'callback' is a function that will be called when this element changes.
+      'callback' => 'form_edit_sell_price_callback',
+      // 'wrapper' is the HTML id of the page element that will be replaced.
+      'wrapper' => 'replace_textfield_div-'.$nid,
+      // There are also several optional keys - see ajax_example_autocheckboxes
+      // below for details on 'method', 'effect' and 'speed' and
+      // ajax_example_dependent_dropdown for 'event'.
+    ),
+  );
+
+  // This entire form element will be replaced whenever 'changethis' is updated.
+  $form['sell_price_form']['replace_textfield'] = array(
+    '#type' => 'textfield',
+    '#title' => t("Why"),
+    // The prefix/suffix provide the div that we're replacing, named by
+    // #ajax['wrapper'] above.
+    '#prefix' => '<div id="replace_textfield_div">',
+    '#suffix' => '</div>',
+  );
+*/
+//  dpm($form);
+  return $form;
+}
+function form_edit_sell_price_callback ($form, $form_state) {
+dpm($form);
+dpm($form_state);
+$form['sell_price_form']['field']['#value']=t(uc_currency_format($form_state['input']['field'],FALSE,true));
+$n=node_load($form_state['build_info']['args']['0']);
+$n->sell_price=$form_state['input']['field'];
+node_save($n);
+return $form['sell_price_form'];
+}
+
+
+
+
+ 

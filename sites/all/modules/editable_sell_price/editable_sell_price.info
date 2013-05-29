@@ -1,0 +1,4 @@
+name = Editable sell price in Ubercart
+description = Editable sell price in Ubercart
+version = VERSION
+core = 7.x
